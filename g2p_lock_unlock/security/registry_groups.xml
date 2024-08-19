@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record model="ir.module.category" id="security_profile">
+        <field name="name">Social registry Groups</field>
+        <field name="description">User access level for the openg2p Social Registry Individual</field>
+        <field name="sequence">4</field>
+    </record>
+       <record id="registry_super_admin" model="res.groups">
+        <field name="name">Super Admin</field>
+        <field name="category_id" ref="security_profile" />
+    </record>
+    <record id="registry_data_admin" model="res.groups">
+        <field name="name">Data administrator</field>
+        <field name="category_id" ref="security_profile" />
+    </record>
+    <record id="registry_data_validator" model="res.groups">
+        <field name="name">Data validator</field>
+        <field name="category_id" ref="security_profile" />
+    </record>
+
+    <record id="registry_system_admin" model="res.groups">
+        <field name="name">Data Enumerator</field>
+        <field name="category_id" ref="security_profile" />
+    </record>
+
+<!--    <record id="res_partner_change_request_rule" model="ir.rule">-->
+<!--    <field name="name">Partner Change Request Rule</field>-->
+<!--    <field name="model_id" ref="model_res_partner_change_request"/>-->
+<!--    <field name="groups" eval="[(4, ref('g2p_lock_unlock.registry_data_validator'))]"/>-->
+<!--    <field name="perm_read" eval="True"/>-->
+<!--    <field name="perm_write" eval="True"/>-->
+<!--    <field name="perm_create" eval="True"/>-->
+<!--    <field name="perm_unlink" eval="True"/>-->
+<!--</record>-->
+</odoo>

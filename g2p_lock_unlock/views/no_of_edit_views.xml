@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <!-- <record id="view_superset_dashboard" model="ir.ui.view">
+            <field name="name">Superset Dashboard</field>
+            <field name="model">ir.ui.view</field>
+            <field name="arch" type="xml">
+                <form string="Superset Dashboard">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>Superset Dashboard</h1>
+                        </div>
+                        <div class="oe_button_box" name="button_box">
+                            <iframe src="http://localhost:8088/superset/dashboard/p/EKYoBMbdqLv/" width="100%" height="600px" frameborder="0"></iframe>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record> -->
+
+
+
+    <record id="no_of_edits_view_tree" model="ir.ui.view">
+        <field name="name">no.of.edits.view.tree</field>
+        <field name="model">no.of.edits</field>
+        <field name="arch" type="xml">
+            <tree editable="top" class="text-left">
+            <field name="edit_amount" string="number of eddits allowed"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="no_of_edits_action" model="ir.actions.act_window">
+        <field name="name">Number of Edits </field>
+        <field name="res_model">no.of.edits</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        id="no_of_edits_menu"
+        name="Number of Edits"
+        action="no_of_edits_action"
+        sequence="100"
+        parent = "g2p_registry_base.g2p_configuration_menu_root"/>
+
+
+</odoo>

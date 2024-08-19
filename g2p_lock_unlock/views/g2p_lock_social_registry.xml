@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+
+        <record id="g2p_social_registry__lock_inherited" model="ir.ui.view">
+        <field name="name">view_individuals_form_land_information_inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="g2p_registry_individual.view_individuals_form" />
+        <field name="arch" type="xml">
+                <xpath expr="//field[@name='tags_ids']" position="after">
+                    <field name="edit_state" />
+
+                </xpath>
+                 <xpath expr="//button[@name='enable_registrant']" position="after">
+                   <button string="Accept" name="button_open_profile"
+                            invisible="edit_state != 'locked'" type="object"
+                            class="oe_highlight"
+                            groups="g2p_lock_unlock.registry_super_admin"
+                            />
+                </xpath>
+
+
+        </field>
+    </record>
+
+       <record model="ir.ui.view" id="farmer_profile_tree_view_inherit">
+        <field name="name">farmer_profile_tree_view_inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="g2p_registry_individual.view_individuals_list_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='registration_date']"
+                   position="after">
+                <field string="Status"
+                       name="edit_state"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

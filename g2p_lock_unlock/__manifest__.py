@@ -8,13 +8,26 @@
     "website": "https://openg2p.org",
     "license": "Other OSI approved licence",
     "depends": [
+        "base",
         "g2p_registry_group",
         "g2p_registry_individual",
         "g2p_registry_membership",
     ],
     "external_dependencies": {},
-    "data": [],
-    "assets": {},
+    "data": [
+        'security/registry_groups.xml',
+        'security/ir.model.access.csv',
+        'views/no_of_edit_views.xml',
+        'views/request_views.xml',
+         "wizard/request_wiz_view.xml",
+         "views/edit_request.xml",
+         # "data/edit_request_mail_template.xml",
+         # "data/activity.xml",
+        'views/g2p_lock_social_registry.xml',
+    ],
+     "assets": {"web.assets_backend": [
+    # 'g2p_lock_unlock/static/src/js/g2p_profile_lock.js'
+    ]},
     "demo": [],
     "images": [],
     "application": True,
