@@ -15,13 +15,13 @@
         "security/ir.model.access.csv",
         "data/default_deduplicator_config.xml",
         "views/deduplicator_config_view.xml",
-        # "views/individual_view.xml",
+        "views/individual_view.xml",
         "views/res_config_view.xml",
     ],
     "assets": {
         "web.assets_backend": [
-            # "/g2p_registry_id_deduplication/static/src/js/duplicate_button.js",
-            # "/g2p_registry_id_deduplication/static/src/xml/duplicate_template.xml",
+            "g2p_registry_deduplication_deduplicator/static/src/js/view_duplicates.js",
+            "g2p_registry_deduplication_deduplicator/static/src/xml/view_duplicates_template.xml",
         ],
     },
     "demo": [],

@@ -19,6 +19,15 @@
         <field name="priority" eval="1" />
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button
+                        type="object"
+                        class="btn-success"
+                        name="save_upload_config"
+                        title="Sync Config"
+                        string="Sync Config"
+                    />
+                </header>
                 <group name="dedupe_config_base" string="Base">
                     <field name="name" />
                     <field name="config_name" />
