@@ -2,4 +2,3 @@
 
 from . import region
 from . import registrant
-from . import g2p_que_id_generation

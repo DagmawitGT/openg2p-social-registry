@@ -26,12 +26,14 @@ class ResPartner(models.Model):
 
     def generate_unique_id(self):
         for rec in self:
-            g2p_que_id_model = self.env["g2p.que.id.generation"]
-            if not g2p_que_id_model.search([("registrant_id", "=", rec.id)]):
-                g2p_que_id_model.create(
+            g2p_que_background_task_model = self.env["g2p.que.background.task"]
+            if not g2p_que_background_task_model.search(
+                [("worker_payload", "ilike", f'"registrant_id": {rec.id}')]
+            ):
+                g2p_que_background_task_model.create(
                     {
-                        "registrant_id": rec.id,
-                        "id_generation_request_status": "PENDING",
-                        "id_generation_update_status": "NOT_APPLICABLE",
+                        "worker_type": "id_generation_request_worker",
+                        "worker_payload": {"registrant_id": rec.id},
+                        "task_status": "PENDING",
                     }
                 )
