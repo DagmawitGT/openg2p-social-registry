@@ -27,9 +27,7 @@ class ResPartner(models.Model):
     def generate_unique_id(self):
         for rec in self:
             g2p_que_background_task_model = self.env["g2p.que.background.task"]
-            if not g2p_que_background_task_model.search(
-                [("worker_payload->>'registrant_id'", "=", rec.id)]
-            ):
+            if not g2p_que_background_task_model.search([("worker_payload->>'registrant_id'", "=", rec.id)]):
                 g2p_que_background_task_model.create(
                     {
                         "worker_type": "id_generation_request_worker",
