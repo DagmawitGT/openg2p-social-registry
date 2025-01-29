@@ -11,6 +11,8 @@
     "data": [
         "views/group_view.xml",
         "views/individual_view.xml",
+        "views/group_template.xml",
+        "views/individual_template.xml",
     ],
     "assets": {},
     "demo": [],
