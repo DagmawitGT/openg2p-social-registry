@@ -10,4 +10,4 @@ access_memebershp_base_val,g2p_memebershp_group_base_val_access,g2p_registry_mem
 access_reg_rel_group_base_val,g2p_reg_rel_group_base_val_access,g2p_registry_base.model_g2p_reg_rel,g2p_draft_publish.group_int_validator,1,1,1,1
 g2p_phone_number_val,Phone Number val Access,g2p_registry_base.model_g2p_phone_number,g2p_draft_publish.group_int_validator,1,1,1,1
 
-
+access_reject_wizard,group_reject_wizard_all,model_reject_wizard,g2p_draft_publish.group_int_validator,1,1,1,1

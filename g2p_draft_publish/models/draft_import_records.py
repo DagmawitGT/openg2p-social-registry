@@ -50,12 +50,12 @@ class G2PDraftImportedRecord(models.Model):
     def create(self, vals):
         # Custom logic before creation
         partner_data = {
-            "given_name": self.given_name,
-            "family_name": self.family_name,
-            "addl_name": self.addl_name,
-            "phone": self.phone,
-            "gender": self.gender,
-            "region": self.region,
+            "given_name": vals["given_name"],
+            "family_name": vals["family_name"],
+            "addl_name": vals["addl_name"],
+            "phone": vals["phone"],
+            "gender": vals["gender"],
+            "region": vals["region"],
         }
         vals["partner_data"] = json.dumps(partner_data)
 
@@ -190,7 +190,6 @@ class G2PDraftImportedRecord(models.Model):
         }
 
     def _process_json_data(self, json_data):
-        print("insdie procsess json", json_data)
         """Processes JSON data and returns context data and additional G2P info."""
         partner_model_fields = self.env["res.partner"]._fields
         _logger.info("The set of fields: %s", partner_model_fields)
