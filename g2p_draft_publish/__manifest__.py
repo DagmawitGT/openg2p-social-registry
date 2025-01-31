@@ -7,13 +7,9 @@
     "data": [
         "security/rules.xml",
         "security/ir.model.access.csv",
-        "data/enrichment_status.xml",
-        "views/configurations.xml",
         "views/draft_imported_records.xml",
-        "views/imported_records.xml",
         "wizards/add_followers.xml",
         "wizards/rejection.xml",
-        "wizards/change_kanban_state.xml",
     ],
     "assets": {
         "web.assets_backend": [
@@ -26,7 +22,7 @@
     "author": "OpenG2P",
     "website": "https://openg2p.org",
     "installable": True,
-    "application": False,
+    "application": True,
     "auto_install": False,
     # "images": ["static/description/Banner.gif"],
     "license": "",

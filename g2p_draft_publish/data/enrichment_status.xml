@@ -1,8 +1,0 @@
-<odoo noupdate="1">
-
- <record id="enrichment_started" model="g2p.validation.status">
-        <field name="name">Started</field>
-    </record>
-
-
-</odoo>

@@ -30,26 +30,26 @@
     </field>
 </record>
 
-  <record id="base_imported_record_action_server" model="ir.actions.server">
-        <field name="name">Add Followers</field>
-        <field name="model_id" ref="model_g2p_imported_record" />
-        <field name="binding_model_id" ref="model_g2p_imported_record" />
-        <field name="state">code</field>
-        <field name="code">
+<!--  <record id="base_imported_record_action_server" model="ir.actions.server">-->
+<!--        <field name="name">Add Followers</field>-->
+<!--        <field name="model_id" ref="model_g2p_imported_record" />-->
+<!--        <field name="binding_model_id" ref="model_g2p_imported_record" />-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">-->
 
-             action = {
-                'type': 'ir.actions.act_window',
-                'name': 'Add Followers for Multiple Records',
-                'res_model': 'mail.wizard.invite',
-                'view_mode': 'form',
-                'views': [(env.ref('g2p_draft_publish.mail_wizard_invite_form_multiple').id, 'form')],
-                'target': 'new',
-                'context': {
-                    'default_res_model': 'res.partner',
-            },
-        }
-        </field>
-    </record>
+<!--             action = {-->
+<!--                'type': 'ir.actions.act_window',-->
+<!--                'name': 'Add Followers for Multiple Records',-->
+<!--                'res_model': 'mail.wizard.invite',-->
+<!--                'view_mode': 'form',-->
+<!--                'views': [(env.ref('g2p_draft_publish.mail_wizard_invite_form_multiple').id, 'form')],-->
+<!--                'target': 'new',-->
+<!--                'context': {-->
+<!--                    'default_res_model': 'res.partner',-->
+<!--            },-->
+<!--        }-->
+<!--        </field>-->
+<!--    </record>-->
 
 
 

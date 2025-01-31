@@ -101,3 +101,14 @@ class G2PImportedRecord(models.Model):
             "domain": [("import_record_id", "=", self.id)],
             "context": dict(self.env.context, default_import_record_id=self.id),
         }
+
+    def assign_records(self):
+
+        return {
+            "name": "Draft Records",
+            "type": "ir.actions.act_window",
+            "res_model": "assign.records.wizard",
+            "view_mode": "form",
+            "target": "new",
+        }
+

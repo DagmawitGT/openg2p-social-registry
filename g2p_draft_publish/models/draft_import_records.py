@@ -2,7 +2,7 @@ import json
 import logging
 from datetime import date, datetime
 
-from odoo import _, fields, models
+from odoo import _, fields, models,api
 from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
@@ -39,13 +39,33 @@ class G2PDraftImportedRecord(models.Model):
     region = fields.Char()
 
     partner_data = fields.Json(string="Partner Data (JSON)")
-    validation_status = fields.Many2one("g2p.validation.status")
     state = fields.Selection(
         selection=[("in_enrichment", "Enrichment"), ("submitted", "Submitted"), ("published", "Published")],
         default="in_enrichment",
     )
     import_record_id = fields.Many2one("g2p.imported.record", string="Import Record")
     rejection_reason = fields.Text("remark")
+
+    @api.model
+    def create(self, vals):
+        # Custom logic before creation
+        partner_data = {
+            "given_name": self.given_name,
+            "family_name": self.family_name,
+            "addl_name": self.addl_name,
+            "phone": self.phone,
+            "gender": self.gender,
+            "region": self.region,
+        }
+        vals["partner_data"] = json.dumps(partner_data)
+
+        self.sudo().write({"message_partner_ids": [(6, 0, self.message_partner_ids.ids)]})
+        record = super(G2PDraftImportedRecord, self).create(vals)
+
+        # Custom logic after creation (e.g., logging or notifications)
+        self.env.cr.commit()  # Ensure the record is committed before further processing
+
+        return record
 
     def action_change_state(self):
         return {
@@ -170,6 +190,7 @@ class G2PDraftImportedRecord(models.Model):
         }
 
     def _process_json_data(self, json_data):
+        print("insdie procsess json", json_data)
         """Processes JSON data and returns context data and additional G2P info."""
         partner_model_fields = self.env["res.partner"]._fields
         _logger.info("The set of fields: %s", partner_model_fields)
