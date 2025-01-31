@@ -49,11 +49,12 @@ class G2PDraftImportedRecord(models.Model):
     @api.model
     def create(self, vals):
         # Custom logic before creation
+        phone_number_ids = [(0, 0, {"phone_no": vals["phone"]})]
         partner_data = {
             "given_name": vals["given_name"],
             "family_name": vals["family_name"],
             "addl_name": vals["addl_name"],
-            "phone": vals["phone"],
+            "phone_number_ids": phone_number_ids,
             "gender": vals["gender"],
             "region": vals["region"],
         }
