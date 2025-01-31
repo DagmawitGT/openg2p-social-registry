@@ -16,6 +16,7 @@
                     widget="badge"
                     name="state"
                 />
+
                 <button
                     string="Edit"
                     invisible="state=='published'"

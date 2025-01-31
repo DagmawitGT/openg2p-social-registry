@@ -19,7 +19,7 @@ class RejectWizard(models.TransientModel):
 
         record.write(
             {
-                "state": "in_enrichment",
+                "state": "rejected",
                 "rejection_reason": self.rejection_reason,
             }
         )

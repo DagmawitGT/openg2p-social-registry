@@ -40,7 +40,7 @@ class G2PDraftImportedRecord(models.Model):
 
     partner_data = fields.Json(string="Partner Data (JSON)")
     state = fields.Selection(
-        selection=[("in_enrichment", "Enrichment"), ("submitted", "Submitted"), ("published", "Published")],
+        selection=[("in_enrichment", "Enrichment"), ("submitted", "Submitted"), ("published", "Published"), ("rejected", "Rejected")],
         default="in_enrichment",
     )
     import_record_id = fields.Many2one("g2p.imported.record", string="Import Record")

@@ -1,7 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_draft_imported_record_user,access_draft_imported_record_user,model_draft_imported_record,g2p_draft_publish.group_int_validator,1,1,1,1
 access_res_partner_val,resp_manager_val,model_res_partner,g2p_draft_publish.group_int_validator,1,1,1,1
-access_change_state_wizard,group_reject_wizard_all,model_change_state_wizard,g2p_draft_publish.group_int_validator,1,1,1,1
 access_tag_val,group_tag_val,g2p_registry_base.model_g2p_registrant_tags,g2p_draft_publish.group_int_validator,1,1,1,1
 
 access_reg_id_group_base_val,g2p_reg_id_group_base_val_access,g2p_registry_base.model_g2p_reg_id,g2p_draft_publish.group_int_validator,1,1,1,1
