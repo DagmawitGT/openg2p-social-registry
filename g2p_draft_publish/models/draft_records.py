@@ -2,6 +2,7 @@ import json
 import logging
 from datetime import date, datetime
 
+from lxml import etree
 from odoo import _, fields, models,api
 from odoo.exceptions import UserError, ValidationError
 
@@ -275,7 +276,6 @@ class G2PRespartnerIntegration(models.Model):
         processed_m2m_fields = {}
         for field in m2m_fields:
             processed_m2m_fields[field] = [item[1] for item in vals.get(field, [])]
-
         dynamic_fields = {
             "is_company": False,
             "is_group": False,
@@ -284,32 +284,7 @@ class G2PRespartnerIntegration(models.Model):
             **processed_m2m_fields,
         }
 
-        static_fields = [
-            "given_name",
-            "family_name",
-            "address",
-            "addl_name",
-            "birthdate",
-            "region",
-            "email",
-            "gender",
-            "civil_status",
-            "district",
-            "occupation",
-            "birthdate_not_exact",
-            "income",
-            "birth_place",
-            "martial_status",
-            "education",
-            "is_disabled",
-            "phone_number_ids",
-            "related_1_ids",
-            "related_2_ids",
-            "individual_membership_ids",
-            "group_memebership_ids",
-            "reg_ids",
-            "additional_g2p_info",
-        ]
+        static_fields = self.get_fields_in_view()
 
         draft_record = {}
 
@@ -351,4 +326,33 @@ class G2PRespartnerIntegration(models.Model):
             raise ValidationError(_("Record already has been Submitted"))
         else:
             record.action_submit()
+
+    def get_fields_in_view(self):
+        views = self.env['ir.ui.view'].search([
+            ('model', '=', 'res.partner'),
+            ('type', '=', 'form'),  # Assuming you want to get fields from form view
+        ])
+
+        # Initialize a set to store field names from all views (base and inherited)
+        fields_in_view = set()
+
+        # Loop through each view (including inherited ones)
+        for view in views:
+            # Get the architecture of the view
+            arch = view.arch
+
+            # Use lxml to parse the XML
+            root = etree.fromstring(arch)
+
+            # Loop through all the <field> tags and collect the field names
+            for field in root.xpath('//field'):
+                field_name = field.get('name')
+                if field_name:
+                    fields_in_view.add(field_name)
+
+        # Now compare fields_in_view with actual fields in the model
+        all_fields_in_model = set(self._fields.keys())
+        usable_fields = all_fields_in_model.intersection(fields_in_view)
+
+        return usable_fields
 
