@@ -7,12 +7,11 @@ from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
 
-
 class BaseInherit(models.AbstractModel):
     _inherit = "base"
 
     def web_save(self, vals, specification: dict[str, dict], next_id=None) -> list[dict]:
-        if self._name == "res.partner" and self.env.context.get("in_enrichment"):
+        if self._name == "res.partner" and self.env.context.get("draft"):
             self.action_save_to_draft(vals)
             return self
 
@@ -25,8 +24,8 @@ class BaseInherit(models.AbstractModel):
         return self.with_context(bin_size=True).web_read(specification)
 
 
-class G2PDraftImportedRecord(models.Model):
-    _name = "draft.imported.record"
+class G2PDraftRecord(models.Model):
+    _name = "draft.record"
     _description = "Draft Imported Records"
     _inherit = ["mail.thread", "mail.activity.mixin"]
 
@@ -40,10 +39,9 @@ class G2PDraftImportedRecord(models.Model):
 
     partner_data = fields.Json(string="Partner Data (JSON)")
     state = fields.Selection(
-        selection=[("in_enrichment", "Enrichment"), ("submitted", "Submitted"), ("published", "Published"), ("rejected", "Rejected")],
-        default="in_enrichment",
+        selection=[("draft", "Draft"), ("submitted", "Submitted"), ("published", "Published"), ("rejected", "Rejected")],
+        default="draft",
     )
-    import_record_id = fields.Many2one("g2p.imported.record", string="Import Record")
     rejection_reason = fields.Text("remark")
 
     @api.model
@@ -61,7 +59,7 @@ class G2PDraftImportedRecord(models.Model):
         vals["partner_data"] = json.dumps(partner_data)
 
         self.sudo().write({"message_partner_ids": [(6, 0, self.message_partner_ids.ids)]})
-        record = super(G2PDraftImportedRecord, self).create(vals)
+        record = super(G2PDraftRecord, self).create(vals)
 
         # Custom logic after creation (e.g., logging or notifications)
         self.env.cr.commit()  # Ensure the record is committed before further processing
@@ -83,10 +81,8 @@ class G2PDraftImportedRecord(models.Model):
         partner_data = json.loads(self.partner_data)
         res_partner_model = self.env["res.partner"]
 
-        # Fetch all fields metadata from res.partner
         fields_metadata = res_partner_model.fields_get()
 
-        # Dictionary to store valid fields and values
         valid_data = {}
 
         given_name = partner_data.get("given_name", "")
@@ -183,7 +179,7 @@ class G2PDraftImportedRecord(models.Model):
             "context": {
                 **context_data,
                 "default_additional_g2p_info": json.dumps(additional_g2p_info),
-                "in_enrichment": "yes",
+                "draft": "yes",
                 "default_phone_number_ids": json_data.get("phone_number_ids", []),
                 "default_individual_membership_ids": json_data.get("individual_membership_ids", []),
                 "default_reg_ids": json_data.get("reg_ids", []),
@@ -191,11 +187,7 @@ class G2PDraftImportedRecord(models.Model):
         }
 
     def _process_json_data(self, json_data):
-        """Processes JSON data and returns context data and additional G2P info."""
         partner_model_fields = self.env["res.partner"]._fields
-        _logger.info("The set of fields: %s", partner_model_fields)
-        _logger.info("The JSON data: %s", json_data.items())
-
         additional_g2p_info = {}
         context_data = {}
 
@@ -207,7 +199,6 @@ class G2PDraftImportedRecord(models.Model):
             field = partner_model_fields[field_name]
 
             if field.type == "datetime" and isinstance(field_value, str):
-                _logger.info(f"the datetime field {field_name}")
                 field_value = datetime.fromisoformat(field_value)
                 context_data[f"default_{field_name}"] = field_value
 
@@ -216,19 +207,16 @@ class G2PDraftImportedRecord(models.Model):
                 context_data[f"default_{field_name}"] = field_value
 
             elif (field.type == "char" or field.type == "text") and isinstance(field_value, str):
-                _logger.info(f"the datetime field {field_name}")
                 context_data[f"default_{field_name}"] = field_value
 
             elif field.type == "many2one":
                 if isinstance(field_value, int):
                     field_value = int(field_value)
                     context_data[f"default_{field_name}"] = json_data[field_name]
-                    _logger.info(f"the many2one field {field_name}")
                 else:
                     additional_g2p_info[field_name] = field_value
 
             elif field.type == "many2many":
-                # _logger.info(f"the field {field_name}")
                 if isinstance(field_value, list):
                     if all(isinstance(val, int) for val in field_value):
                         context_data[f"default_{field_name}"] = [(6, 0, field_value)]
@@ -242,7 +230,6 @@ class G2PDraftImportedRecord(models.Model):
                     additional_g2p_info[field_name] = field_value
 
             elif field.type == "selection":
-                _logger.info(f"the field {field_name}")
                 selection_values = field.get_values(env=self.env)
                 if field_value in selection_values:
                     context_data[f"default_{field_name}"] = field_value
@@ -251,11 +238,6 @@ class G2PDraftImportedRecord(models.Model):
 
             else:
                 context_data[f"default_{field_name}"] = field_value
-
-            _logger.info(f"The context data: {context_data}")
-
-        # except ValueError as e:
-        #     _logger.error("A ValueError occurred: %s", str(e), exc_info=True)
 
         return context_data, additional_g2p_info
 
@@ -369,3 +351,4 @@ class G2PRespartnerIntegration(models.Model):
             raise ValidationError(_("Record already has been Submitted"))
         else:
             record.action_submit()
+

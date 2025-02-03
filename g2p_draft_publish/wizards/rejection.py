@@ -12,7 +12,6 @@ class RejectWizard(models.TransientModel):
     rejection_reason = fields.Text(string="Reason for Rejection", required=True)
 
     def confirm_rejection(self):
-        print("rejecting")
         active_ids = self._context.get("active_ids")
         self.ensure_one()
         record = self.env["draft.imported.record"].browse(active_ids[0])
@@ -34,11 +33,6 @@ class RejectWizard(models.TransientModel):
         exclusive_validator_users = validator_users.filtered(
             lambda user: user not in admin_group.users and user not in approver_group.users
         )
-        print("validators are", validator_users)
-        matching_users = exclusive_validator_users.filtered(
-            lambda user: user.partner_id.id in record.message_partner_ids.ids
-        )
-        print("matching records are", matching_users)
 
         if validator_users:
             for user in validator_users:
@@ -50,7 +44,6 @@ class RejectWizard(models.TransientModel):
                         .id,
                         "res_id": record.id,
                         "user_id": user.id,
-                        # "date_deadline": fields.Date.context_today(self),
                         "summary": "Record Rejected",
                         "note": f"Reason: {self.rejection_reason}. Please review and sumbit again.",
                     }

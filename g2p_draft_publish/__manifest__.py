@@ -7,8 +7,7 @@
     "data": [
         "security/rules.xml",
         "security/ir.model.access.csv",
-        "views/draft_imported_records.xml",
-        "wizards/add_followers.xml",
+        "views/draft_records.xml",
         "wizards/rejection.xml",
     ],
     "assets": {
@@ -24,6 +23,5 @@
     "installable": True,
     "application": True,
     "auto_install": False,
-    # "images": ["static/description/Banner.gif"],
     "license": "",
 }

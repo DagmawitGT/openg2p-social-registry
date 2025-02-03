@@ -1,7 +1,7 @@
 <odoo>
     <record id="view_draft_imported_record_tree" model="ir.ui.view">
-        <field name="name">draft.imported.record.tree</field>
-        <field name="model">draft.imported.record</field>
+        <field name="name">draft.record.tree</field>
+        <field name="model">draft.record</field>
         <field name="arch" type="xml">
             <tree create="true" delete="true" edit="true" editable="bottom">
                 <field name="given_name" />
@@ -11,7 +11,7 @@
                 <field name="gender" />
                 <field name="region" />
                 <field
-                    decoration-warning="state == 'in_enrichment'"
+                    decoration-warning="state == 'draft'"
                     decoration-success="state == 'published'"
                     widget="badge"
                     name="state"
@@ -19,14 +19,14 @@
 
                 <button
                     string="Edit"
-                    invisible="state=='published'"
+                    invisible="state == 'published'"
                     type="object"
                     name="action_open_wizard"
                     groups="g2p_draft_publish.group_int_validator,g2p_draft_publish.group_int_admin"
                 />
                 <button
                     string="Submit"
-                    invisible="state!='in_enrichment'"
+                    invisible="state != 'draft'"
                     type="object"
                     name="action_submit"
                     groups="g2p_draft_publish.group_int_validator,g2p_draft_publish.group_int_admin"
@@ -34,7 +34,7 @@
 
                 <button
                     string="Publish"
-                    invisible="state!='submitted'"
+                    invisible="state != 'submitted'"
                     type="object"
                     name="action_publish"
                     groups="g2p_draft_publish.group_int_approver,g2p_draft_publish.group_int_admin"
@@ -53,14 +53,13 @@
 
 
     <record id="view_draft_imported_record_form" model="ir.ui.view">
-        <field name="name">draft.imported.record.form</field>
-        <field name="model">draft.imported.record</field>
+        <field name="name">draft.record.form</field>
+        <field name="model">draft.record</field>
         <field name="arch" type="xml">
             <form string="Draft Imported Farmer Record">
 
                 <header>
-                    <!-- <button name="action_to_draft" type="object" string="Set To Draft" invisible="state!='moved'" class="btn btn-info" /> -->
-                    <field name="state" widget="statusbar" statusbar_visible="in_enrichment,published" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,published" />
                 </header>
 
                 <sheet>
@@ -142,7 +141,7 @@
 
     <record id="action_draft_imported_record" model="ir.actions.act_window">
         <field name="name">Draft</field>
-        <field name="res_model">draft.imported.record</field>
+        <field name="res_model">draft.record</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[('state', '!=', 'submitted')]</field>
         <field
@@ -155,7 +154,7 @@
 
     <record id="action_submitted_draft_imported_record" model="ir.actions.act_window">
         <field name="name">Submitted</field>
-        <field name="res_model">draft.imported.record</field>
+        <field name="res_model">draft.record</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">['|',('state', '=', 'submitted'),('state', '=', 'published')]</field>
         <field
@@ -169,8 +168,8 @@
 
 
     <record id="rejection_form_wizard_view" model="ir.ui.view">
-        <field name="name">draft.imported.record.form</field>
-        <field name="model">draft.imported.record</field>
+        <field name="name">draft.record.form</field>
+        <field name="model">draft.record</field>
         <field name="arch" type="xml">
             <form>
                 <group>
@@ -184,11 +183,11 @@
         </field>
     </record>
 
-      <menuitem
-        id="draft_publish_main_menu"
-        name="Draft Publish"
-        action="action_draft_imported_record"
-        sequence="10"
+  <menuitem
+    id="draft_publish_main_menu"
+    name="Draft Publish"
+    action="action_draft_imported_record"
+    sequence="10"
     />
 
     <menuitem
