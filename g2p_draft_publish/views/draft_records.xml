@@ -184,10 +184,10 @@
     </record>
 
   <menuitem
-    id="draft_publish_main_menu"
-    name="Draft Publish"
-    action="action_draft_imported_record"
-    sequence="10"
+        id="draft_publish_main_menu"
+        name="Draft Publish"
+        action="action_draft_imported_record"
+        sequence="10"
     />
 
     <menuitem

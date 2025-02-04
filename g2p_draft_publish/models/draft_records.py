@@ -3,10 +3,12 @@ import logging
 from datetime import date, datetime
 
 from lxml import etree
-from odoo import _, fields, models,api
+
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
+
 
 class BaseInherit(models.AbstractModel):
     _inherit = "base"
@@ -40,7 +42,12 @@ class G2PDraftRecord(models.Model):
 
     partner_data = fields.Json(string="Partner Data (JSON)")
     state = fields.Selection(
-        selection=[("draft", "Draft"), ("submitted", "Submitted"), ("published", "Published"), ("rejected", "Rejected")],
+        selection=[
+            ("draft", "Draft"),
+            ("submitted", "Submitted"),
+            ("published", "Published"),
+            ("rejected", "Rejected"),
+        ],
         default="draft",
     )
     rejection_reason = fields.Text("remark")
@@ -60,11 +67,7 @@ class G2PDraftRecord(models.Model):
         vals["partner_data"] = json.dumps(partner_data)
 
         self.sudo().write({"message_partner_ids": [(6, 0, self.message_partner_ids.ids)]})
-        record = super(G2PDraftRecord, self).create(vals)
-
-        # Custom logic after creation (e.g., logging or notifications)
-        self.env.cr.commit()  # Ensure the record is committed before further processing
-
+        record = super().create(vals)
         return record
 
     def action_change_state(self):
@@ -328,10 +331,12 @@ class G2PRespartnerIntegration(models.Model):
             record.action_submit()
 
     def get_fields_in_view(self):
-        views = self.env['ir.ui.view'].search([
-            ('model', '=', 'res.partner'),
-            ('type', '=', 'form'),  # Assuming you want to get fields from form view
-        ])
+        views = self.env["ir.ui.view"].search(
+            [
+                ("model", "=", "res.partner"),
+                ("type", "=", "form"),  # Assuming you want to get fields from form view
+            ]
+        )
 
         # Initialize a set to store field names from all views (base and inherited)
         fields_in_view = set()
@@ -345,8 +350,8 @@ class G2PRespartnerIntegration(models.Model):
             root = etree.fromstring(arch)
 
             # Loop through all the <field> tags and collect the field names
-            for field in root.xpath('//field'):
-                field_name = field.get('name')
+            for field in root.xpath("//field"):
+                field_name = field.get("name")
                 if field_name:
                     fields_in_view.add(field_name)
 
@@ -355,4 +360,3 @@ class G2PRespartnerIntegration(models.Model):
         usable_fields = all_fields_in_model.intersection(fields_in_view)
 
         return usable_fields
-
