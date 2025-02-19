@@ -410,13 +410,13 @@ msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: g2p_draft_publish
-#: model:ir.module.category,description:g2p_draft_publish.integration_module
-msgid "User access level for  Draft Publish module"
+#: model:res.groups,name:g2p_draft_publish.group_int_validator
+msgid "User"
 msgstr ""
 
 #. module: g2p_draft_publish
-#: model:res.groups,name:g2p_draft_publish.group_int_validator
-msgid "Validator"
+#: model:ir.module.category,description:g2p_draft_publish.integration_module
+msgid "User access level for  Draft Publish module"
 msgstr ""
 
 #. module: g2p_draft_publish
