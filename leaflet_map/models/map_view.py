@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import fields, models
+
 
 class MapView(models.Model):
     _name = "map.view"
@@ -10,6 +11,4 @@ class MapView(models.Model):
 class ResPartnerMap(models.Model):
     _inherit = "res.partner"
 
-    map_view_ids = fields.One2many(
-        "map.view", "partner_id", string="Map View"
-    )
+    map_view_ids = fields.One2many("map.view", "partner_id", string="Map View")

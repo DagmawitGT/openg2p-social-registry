@@ -1,7 +1,6 @@
 /** @odoo-module */
-
-import { registry } from "@web/core/registry";
-import { LeafletMapController } from "./lmap_controller"
+import {LeafletMapController} from "./lmap_controller";
+import {registry} from "@web/core/registry";
 
 const leafletMapView = {
     type: "lmap",
@@ -9,6 +8,6 @@ const leafletMapView = {
     icon: "fa fa-map-marker",
     multiRecord: true,
     Controller: LeafletMapController,
-}
+};
 
 registry.category("views").add("lmap", leafletMapView);

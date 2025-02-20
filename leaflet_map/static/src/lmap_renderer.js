@@ -1,12 +1,14 @@
+/* eslint-disable  */
 /** @odoo-module */
 
-import { Component, onWillStart, useRef, onMounted } from "@odoo/owl";
-import { loadJS, loadCSS } from "@web/core/assets";
+import {Component, onWillStart, useRef, onMounted} from "@odoo/owl";
+import {loadJS, loadCSS} from "@web/core/assets";
 
 export class LeafletMapRenderer extends Component {
+    // eslint-disable-next-line
     static template = "leaflet_map.MapRenderer";
     static props = {
-        polygonCoords: { type: Array, optional: true, default: [] },
+        polygonCoords: {type: Array, optional: true, default: []},
     };
 
     setup() {
@@ -20,7 +22,7 @@ export class LeafletMapRenderer extends Component {
             try {
                 const response = await fetch("/osm/config/get", {
                     method: "GET",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {"Content-Type": "application/json"},
                 });
 
                 if (response.ok) {
@@ -56,11 +58,11 @@ export class LeafletMapRenderer extends Component {
             }).addTo(this.map);
 
             // Add polygon if coordinates exist
-//            if (this.props.polygonCoords?.length) {
-//                L.polygon(this.props.polygonCoords).addTo(this.map);
-//            } else {
-//                console.warn("No polygon coordinates received.");
-//            }
+            //            if (this.props.polygonCoords?.length) {
+            //                L.polygon(this.props.polygonCoords).addTo(this.map);
+            //            } else {
+            //                console.warn("No polygon coordinates received.");
+            //            }
         });
     }
 }

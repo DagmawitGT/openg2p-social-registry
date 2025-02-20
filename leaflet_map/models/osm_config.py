@@ -1,4 +1,5 @@
-from odoo import models, fields
+from odoo import fields, models
+
 
 class OSMConfig(models.Model):
     _name = "osm.config"

@@ -7,7 +7,7 @@
             <xpath expr="//page[@name='documents']" position="after">
                 <page string="Location On Map" name="location_on_map">
                     <group>
-                    <field name="map_view_ids"/>
+                    <field name="map_view_ids" />
 <!--                    <field name="partner_longitude" widget="lmap"/>-->
                 </group>
                 </page>
@@ -18,12 +18,12 @@
         <record id="view_inherit_map_location_form_group" model="ir.ui.view">
         <field name="name">view_registrant_map_location_form_group</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="g2p_registry_group.view_groups_form"/>
+        <field name="inherit_id" ref="g2p_registry_group.view_groups_form" />
         <field name="arch" type="xml">
             <xpath expr="//page[@name='documents']" position="after">
                 <page string="Location On Map" name="location_on_map">
                     <group>
-                    <field name="map_view_ids"/>
+                    <field name="map_view_ids" />
                          <lmap string="Partner Map">
         </lmap>
 <!--                    <field name="partner_longitude" widget="lmap"/>-->
@@ -48,7 +48,7 @@
     <field name="name">land Map</field>
     <field name="res_model">map.view</field>
     <field name="view_mode">lmap</field>
-    <field name="view_id" ref="g2p_map_view_id"/>
+    <field name="view_id" ref="g2p_map_view_id" />
     <field name="target">new</field>
 </record>
 </odoo>

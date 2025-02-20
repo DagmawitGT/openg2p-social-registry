@@ -14,7 +14,7 @@
     <field name="arch" type="xml">
         <form>
             <group>
-                <field name="tile_server_url" string="Tile Server url"/>
+                <field name="tile_server_url" string="Tile Server url" />
             </group>
         </form>
     </field>
@@ -25,17 +25,17 @@
     <field name="model">osm.config</field>
     <field name="arch" type="xml">
         <tree>
-                <field name="tile_server_url" string="Tile Server url"/>
+                <field name="tile_server_url" string="Tile Server url" />
         </tree>
     </field>
 </record>
 
   <menuitem
-    id="osm_config"
-    name="OSM Configuration"
-    parent="base.menu_custom"
-    action="action_osm_config"
-    sequence="2"
-  />
+        id="osm_config"
+        name="OSM Configuration"
+        parent="base.menu_custom"
+        action="action_osm_config"
+        sequence="2"
+    />
 
 </odoo>

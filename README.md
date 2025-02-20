@@ -29,6 +29,7 @@ addon | version | maintainers | summary
 [g2p_social_registry_model](g2p_social_registry_model/) | 17.0.0.0.0 |  | G2P Social Registry: Demo
 [g2p_social_registry_proxy_means_test](g2p_social_registry_proxy_means_test/) | 17.0.0.0.0 |  | G2P Social Registry: PMT
 [g2p_social_registry_theme](g2p_social_registry_theme/) | 17.0.0.0.0 |  | OpenG2P Social Registry: Theme
+[leaflet_map](leaflet_map/) | 17.0.0.0.0 |  | Leaflet Map View
 
 [//]: # (end addons)
 
