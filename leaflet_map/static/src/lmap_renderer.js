@@ -5,7 +5,6 @@ import {Component, onWillStart, useRef, onMounted} from "@odoo/owl";
 import {loadJS, loadCSS} from "@web/core/assets";
 
 export class LeafletMapRenderer extends Component {
-    // eslint-disable-next-line
     static template = "leaflet_map.MapRenderer";
     static props = {
         polygonCoords: {type: Array, optional: true, default: []},
