@@ -117,9 +117,9 @@
 
             <xpath expr="//notebook" position="after">
                 <footer>
-                    <button class="btn btn-info" name="action_update" string="Save" type="object"/>
+                    <button class="btn btn-info" name="action_update" string="Save" type="object" />
                     <button string="Discard" class="btn btn-warning" special="cancel" data-hotkey="x" />
-                    <button class="btn btn-success" name="action_submit" string="Submit" type="object"  />
+                    <button class="btn btn-success" name="action_submit" string="Submit" type="object" />
                     <button
                         class="btn btn-success"
                         name="action_publish"
@@ -141,7 +141,7 @@
         <field name="mode">primary</field>
         <field name="arch" type="xml">
 
-        
+
         <xpath expr="//form" position="attributes">
 				<attribute name="edit">0</attribute>
 				<attribute name="create">0</attribute>
@@ -155,7 +155,7 @@
                 </footer>
             </xpath>
 
-    
+
 
 
         </field>
@@ -224,21 +224,21 @@
         </field>
     </record>
 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <menuitem
         id="draft_publish_main_menu"
         name="Draft Publish"

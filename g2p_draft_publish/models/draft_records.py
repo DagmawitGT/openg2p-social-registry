@@ -52,11 +52,8 @@ class G2PDraftRecord(models.Model):
     )
     rejection_reason = fields.Text("remark")
 
-
-  
     @api.model
     def create(self, vals):
-
         partner_data = {
             "given_name": vals["given_name"],
             "family_name": vals["family_name"],
@@ -66,9 +63,7 @@ class G2PDraftRecord(models.Model):
         }
 
         if vals["phone"]:
-            partner_data['phone_number_ids'] = phone_number_ids = [(0, 0, {"phone_no": vals["phone"]})]
-
-
+            partner_data["phone_number_ids"] = [(0, 0, {"phone_no": vals["phone"]})]
 
         vals["partner_data"] = json.dumps(partner_data)
 
@@ -90,54 +85,14 @@ class G2PDraftRecord(models.Model):
         self.ensure_one()
         partner_data = json.loads(self.partner_data)
         res_partner_model = self.env["res.partner"]
-
         fields_metadata = res_partner_model.fields_get()
-
         valid_data = {}
-
         given_name = partner_data.get("given_name", "")
         family_name = partner_data.get("family_name", "")
         gf_name_en = partner_data.get("addl_name", "")
 
-        for field_name, value in partner_data.items():
-            if field_name in fields_metadata:
-                field_info = fields_metadata[field_name]
-                field_type = field_info.get("type")
+        self._prepare_valid_data(valid_data, fields_metadata, partner_data)
 
-                if field_type == "char" or field_type == "text"  and isinstance(value, str):
-                    valid_data[field_name] = value
-                elif field_type == "integer" and isinstance(value, int):
-                    valid_data[field_name] = value
-                elif field_type == "float" and isinstance(value, int | float):
-                    valid_data[field_name] = float(value)
-                elif field_type == "boolean" and isinstance(value, bool):
-                    valid_data[field_name] = value
-                elif field_type == "many2one" and isinstance(value, int):
-                    if self.env[field_info["relation"]].browse(value).exists():
-                        valid_data[field_name] = value
-
-                elif field_type == "many2many" and isinstance(value, list):
-                    vals = []
-                    for v in value:
-                        if self.env[field_info["relation"]].browse(v[1]).exists():
-                            vals.append(v)
-                    valid_data[field_name] = value
-                    
-                elif field_type == "one2many" and isinstance(value, list):
-                    vals = []
-                    for v in value:
-                        vals.append((0, 0, v[2]))
-                        valid_data[field_name] = vals
-
-                elif field_type == "datetime" or field_type == "date":
-                    valid_data[field_name] = value
-
-                elif field_type == "selection":
-                    selection_options = [option[0] for option in field_info.get("selection", [])]
-                    if value in selection_options:
-                        valid_data[field_name] = value
-
-        # Create the res.partner record with valid data
         if valid_data:
             valid_data["db_import"] = "yes"
             valid_data["name"] = f"{given_name} {family_name} {gf_name_en}".upper()
@@ -145,28 +100,81 @@ class G2PDraftRecord(models.Model):
             res_partner_model.sudo().create(valid_data)
             self.write({"state": "published"})
 
-            validator_group = self.env.ref("g2p_draft_publish.group_int_validator")
-            admin_group = self.env.ref("g2p_draft_publish.group_int_admin")
-            approver_group = self.env.ref("g2p_draft_publish.group_int_approver")
-            validator_users = validator_group.users
-            exclusive_validator_users = validator_users.filtered(
-                lambda user: user not in admin_group.users and user not in approver_group.users
-            )
-            matching_users = exclusive_validator_users.filtered(
-                lambda user: user.partner_id.id in self.message_partner_ids.ids
-            )
+            self._notify_validators()
 
-            if matching_users:
-                for user in matching_users:
-                    self.sudo().message_post(
-                            body="Record has been published",
-                            subject="Record Published",
-                            message_type="notification",
-                            partner_ids=[user.partner_id.id],
-                    )
-            self.message_partner_ids = [(4, self.env.user.partner_id.id)]
         else:
             raise ValueError("No valid data found to create a partner record.")
+
+    def _prepare_valid_data(self, valid_data, fields_metadata, partner_data):
+        """Prepare valid data for partner creation based on field types."""
+        validators = {
+            "char": lambda v, f: isinstance(v, str),
+            "text": lambda v, f: isinstance(v, str),
+            "integer": lambda v, f: isinstance(v, int),
+            "float": lambda v, f: isinstance(v, int | float),
+            "boolean": lambda v, f: isinstance(v, bool),
+            "many2one": lambda v, f: isinstance(v, int) and self.env[f["relation"]].browse(v).exists(),
+            "many2many": lambda v, f: isinstance(v, list)
+            and all(self.env[f["relation"]].browse(x[1]).exists() for x in v),
+            "one2many": lambda v, f: isinstance(v, list),
+            "datetime": lambda v, f: True,
+            "date": lambda v, f: True,
+            "selection": lambda v, f: v in [option[0] for option in f.get("selection", [])],
+        }
+
+        for field_name, value in partner_data.items():
+            if field_name not in fields_metadata:
+                continue
+
+            field_info = fields_metadata[field_name]
+            field_type = field_info.get("type")
+
+            if validators.get(field_type, lambda v, f: False)(value, field_info):
+                valid_data[field_name] = value
+
+        # return valid_data
+
+    def _prepare_field_value(self, field_type, value, field_info):
+        """Prepare field value for storage."""
+        preparers = {
+            "float": lambda v: float(v),
+            "many2many": lambda v: v,
+            "one2many": lambda v: [(0, 0, x[2]) for x in v],
+            "datetime": lambda v: v,
+            "date": lambda v: v,
+            "selection": lambda v: v,
+            "many2one": lambda v: v,
+            "boolean": lambda v: v,
+            "char": lambda v: v,
+            "text": lambda v: v,
+        }
+
+        return preparers.get(field_type, lambda v: v)(value)
+
+    def _notify_validators(self):
+        """Notify appropriate validator users about the published record."""
+        validator_group = self.env.ref("g2p_draft_publish.group_int_validator")
+        admin_group = self.env.ref("g2p_draft_publish.group_int_admin")
+        approver_group = self.env.ref("g2p_draft_publish.group_int_approver")
+
+        validator_users = validator_group.users
+        exclusive_validator_users = validator_users.filtered(
+            lambda user: user not in admin_group.users and user not in approver_group.users
+        )
+
+        matching_users = exclusive_validator_users.filtered(
+            lambda user: user.partner_id.id in self.message_partner_ids.ids
+        )
+
+        if matching_users:
+            for user in matching_users:
+                self.sudo().message_post(
+                    body=_("Record has been published"),
+                    subject=_("Record Published"),
+                    message_type="notification",
+                    partner_ids=[user.partner_id.id],
+                )
+        self.message_partner_ids = [(4, self.env.user.partner_id.id)]
 
     def action_submit(self):
         for record in self:
@@ -184,14 +192,16 @@ class G2PDraftRecord(models.Model):
                     self.sudo().env["mail.activity"].create(
                         {
                             "activity_type_id": self.env.ref("mail.mail_activity_data_todo").id,
-                            "res_model_id": self.sudo().env["ir.model"].search([("model", "=", "draft.record")]).id,
+                            "res_model_id": self.sudo()
+                            .env["ir.model"]
+                            .search([("model", "=", "draft.record")])
+                            .id,
                             "res_id": record.id,
                             "user_id": user.id,
                             "summary": "Record Submitted For Approval",
-                            "note": f"Record have been Submitted For Approval!",
+                            "note": "Record have been Submitted For Approval!",
                         }
                     )
-
 
     def _return_wizard_with_context(self, view_id):
         self.ensure_one()
@@ -208,8 +218,6 @@ class G2PDraftRecord(models.Model):
         context_data, additional_g2p_info = self._process_json_data(json_data)
 
         context_data["active_id"] = active_id
-
-      
 
         _logger.info("The Additionla info")
         _logger.info(additional_g2p_info)
@@ -230,15 +238,14 @@ class G2PDraftRecord(models.Model):
                 "default_reg_ids": json_data.get("reg_ids", []),
             },
         }
-    
 
     def action_open_wizard(self):
         return self._return_wizard_with_context(self.env.ref("g2p_draft_publish.g2p_validation_form_view").id)
 
-
     def action_open_wizard_view_only(self):
-        return self._return_wizard_with_context(self.env.ref("g2p_draft_publish.g2p_validation_form_view_only").id)
-    
+        return self._return_wizard_with_context(
+            self.env.ref("g2p_draft_publish.g2p_validation_form_view_only").id
+        )
 
     def _process_json_data(self, json_data):
         partner_model_fields = self.env["res.partner"]._fields
@@ -246,7 +253,6 @@ class G2PDraftRecord(models.Model):
         context_data = {}
 
         for field_name, field_value in json_data.items():
-            
             field = partner_model_fields[field_name]
 
             if field.type == "datetime" and isinstance(field_value, str):
@@ -268,10 +274,9 @@ class G2PDraftRecord(models.Model):
                     if field_name in self._fields and field_value is not None:
                         additional_g2p_info[field_name] = field_value
 
-            elif field.type == 'many2many':
+            elif field.type == "many2many":
                 _logger.info(field_value)
                 if isinstance(field_value, list):
-
                     if all(isinstance(val, list) for val in field_value):
                         items = []
                         for item in field_value:
@@ -281,12 +286,12 @@ class G2PDraftRecord(models.Model):
 
             elif field.type == "selection":
                 selection_values = field.get_values(env=self.env)
-                
+
                 if field_value in selection_values:
                     context_data[f"default_{field_name}"] = field_value
-                
+
                 if field_value not in selection_values:
-                    if field_name in self._fields and field_value is not None :
+                    if field_name in self._fields and field_value is not None:
                         additional_g2p_info[field_name] = field_value
 
             else:
@@ -314,46 +319,6 @@ class G2PRespartnerIntegration(models.Model):
     def action_update(self):
         return
 
-
-
-
-    def _get_static_fields(self):
-        result = []
-
-        for field_name, field in self._fields.items():
-            field_value = self[field_name]
-            
-            if isinstance(field, fields.Boolean):
-                if field_value in (True, False):
-                    result.append(field_name) 
-                continue
-                
-            if isinstance(field, (fields.Char, fields.Text)):
-                if field_value != "false":
-                    result.append(field_name) 
-                continue
-                
-            if isinstance(field, (fields.Date, fields.Datetime)):
-                if field_value != "false":
-                    result.append(field_name)
-                continue
-                
-            if isinstance(field, fields.Many2one):
-                if field_value:
-                    result.append(field_name)
-                continue
-                
-            if isinstance(field, fields.Many2many):
-                if field_value:
-                    result.append(field_name)
-                continue
-                
-            if isinstance(field, fields.One2many):
-                if field_value or not field_value:
-                    result.append(field_name)
-                continue
-
- 
     def action_save_to_draft(self, vals):
         context = self.env.context
         model_name = context.get("active_model")
@@ -368,7 +333,7 @@ class G2PRespartnerIntegration(models.Model):
         processed_m2m_fields = {}
         for field in m2m_fields:
             processed_m2m_fields[field] = [item[1] for item in vals.get(field, [])]
-        
+
         dynamic_fields = {
             "is_company": False,
             "is_group": False,
@@ -399,7 +364,6 @@ class G2PRespartnerIntegration(models.Model):
             draft_record["name"] = " ".join(filter(None, name_parts)).strip()
 
         active_record.write({"partner_data": json.dumps(draft_record)})
-
 
     def action_publish(self):
         context = self.env.context
