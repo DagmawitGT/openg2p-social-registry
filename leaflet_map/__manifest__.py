@@ -1,9 +1,10 @@
 {
     "name": "Leaflet Map View",
     "version": "17.0.0.0.0",
+    "author": "OpenG2P",
     "website": "https://openg2p.org",
-    "category": "Hidden",
     "license": "LGPL-3",
+    "category": "Hidden",
     "installable": True,
     "depends": ["base", "web", "g2p_registry_individual"],
     "data": [
@@ -16,5 +17,4 @@
             "leaflet_map/static/src/*",
         ]
     },
-    "author": "OpenG2P",
 }

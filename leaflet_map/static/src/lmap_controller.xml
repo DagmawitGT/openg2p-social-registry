@@ -2,7 +2,13 @@
 <templates>
     <t t-name="leaflet_map.MapView">
         <Layout display="{ controlPanel:{} }">
-            <LeafletMapRenderer t-props="{ polygonCoords: props.context.polygon_coords }" />
+            <LeafletMapRenderer
+                t-props="{
+                polygonCoords: props.context?.polygon_coords || [],
+                partnerLatitude: props.context?.partner_latitiude || null,
+                partnerLongitude: props.context?.partner_longitude || null
+            }"
+            />
         </Layout>
     </t>
 </templates>

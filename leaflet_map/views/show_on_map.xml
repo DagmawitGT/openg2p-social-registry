@@ -6,10 +6,8 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='documents']" position="after">
                 <page string="Location On Map" name="location_on_map">
-                    <group>
-                    <field name="map_view_ids" />
-<!--                    <field name="partner_longitude" widget="lmap"/>-->
-                </group>
+                    <button class="btn btn-info" name="show_map" string="Open Map" type="object" />
+
                 </page>
             </xpath>
         </field>
@@ -23,10 +21,7 @@
             <xpath expr="//page[@name='documents']" position="after">
                 <page string="Location On Map" name="location_on_map">
                     <group>
-                    <field name="map_view_ids" />
-                         <lmap string="Partner Map">
-        </lmap>
-<!--                    <field name="partner_longitude" widget="lmap"/>-->
+                    <button class="btn btn-info" name="show_map" string="Open Map" type="object" />
                 </group>
                 </page>
             </xpath>
@@ -49,6 +44,6 @@
     <field name="res_model">map.view</field>
     <field name="view_mode">lmap</field>
     <field name="view_id" ref="g2p_map_view_id" />
-    <field name="target">new</field>
+    <field name="target">current</field>
 </record>
 </odoo>

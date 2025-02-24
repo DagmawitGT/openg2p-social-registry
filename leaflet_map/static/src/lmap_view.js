@@ -1,4 +1,6 @@
+/* eslint-disable  */
 /** @odoo-module */
+
 import {LeafletMapController} from "./lmap_controller";
 import {registry} from "@web/core/registry";
 
