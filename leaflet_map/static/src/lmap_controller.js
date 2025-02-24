@@ -2,9 +2,9 @@
 
 // eslint-disable-next-line
 import {Component} from "@odoo/owl";
-import {standardViewProps} from "@web/views/standard_view_props";
-import {LeafletMapRenderer} from "./lmap_renderer";
 import {Layout} from "@web/search/layout";
+import {LeafletMapRenderer} from "./lmap_renderer";
+import {standardViewProps} from "@web/views/standard_view_props";
 
 export class LeafletMapController extends Component {
     static template = "leaflet_map.MapView";
