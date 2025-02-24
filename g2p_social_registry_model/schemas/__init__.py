@@ -1,2 +1,2 @@
 from . import group
-from .import individual
+from . import individual

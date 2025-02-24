@@ -1,9 +1,11 @@
 import graphene
+
 from odoo.addons.g2p_registry_g2p_connect_rest_api.schemas.graphql_schema import (
+    GroupMembershipIds,
     PartnerBase,
-    Query as BaseQuery,
-    GroupMembershipIds
 )
+from odoo.addons.g2p_registry_g2p_connect_rest_api.schemas.graphql_schema import Query as BaseQuery
+
 
 class Partner(PartnerBase):
     group_membership_ids = graphene.Field(graphene.List(GroupMembershipIds))
@@ -13,7 +15,7 @@ class Partner(PartnerBase):
 
     # Social Status Information
     num_preg_lact_women = graphene.Int()
-    num_malnourished_children = graphene.Int() 
+    num_malnourished_children = graphene.Int()
     num_disabled = graphene.Int()
     type_of_disability = graphene.String()
     caste_ethnic_group = graphene.String()
@@ -24,7 +26,7 @@ class Partner(PartnerBase):
     income_sources = graphene.String()
     annual_income = graphene.String()
     owns_two_wheeler = graphene.String()
-    owns_three_wheeler = graphene.String() 
+    owns_three_wheeler = graphene.String()
     owns_four_wheeler = graphene.String()
     owns_cart = graphene.String()
     land_ownership = graphene.String()
@@ -37,8 +39,9 @@ class Partner(PartnerBase):
     education_level = graphene.String()
     employment_status = graphene.String()
     marital_status = graphene.String()
-    occupation= graphene.String()
-    income= graphene.Float()
+    occupation = graphene.String()
+    income = graphene.Float()
+
 
 class Query(BaseQuery):
     get_registrants = graphene.List(
@@ -57,5 +60,6 @@ class Query(BaseQuery):
     )
 
     total_registrant_count = graphene.Int()
+
 
 schema = graphene.Schema(query=Query)

@@ -1,6 +1,7 @@
 from odoo.addons.g2p_registry_rest_api.schemas.group import GroupInfoRequest, GroupInfoResponse
 
-class SocialRegistryDemoGroupInfoResponse(GroupInfoResponse,extends = GroupInfoResponse ):
+
+class SocialRegistryDemoGroupInfoResponse(GroupInfoResponse, extends=GroupInfoResponse):
     # Social Status Information
     num_preg_lact_women: int | None = None
     num_malnourished_children: int | None = None
@@ -23,10 +24,8 @@ class SocialRegistryDemoGroupInfoResponse(GroupInfoResponse,extends = GroupInfoR
     owns_house: str | None = None
     owns_livestock: str | None = None
 
-   
 
-
-class SocialRegistryDemoGroupInfoRequest(GroupInfoRequest,extends = GroupInfoRequest ):
+class SocialRegistryDemoGroupInfoRequest(GroupInfoRequest, extends=GroupInfoRequest):
     # Social Status Information
     num_preg_lact_women: int | None = None
     num_malnourished_children: int | None = None
@@ -48,6 +47,3 @@ class SocialRegistryDemoGroupInfoRequest(GroupInfoRequest,extends = GroupInfoReq
     land_size: float | None = None
     owns_house: str | None = None
     owns_livestock: str | None = None
-    
-
-   

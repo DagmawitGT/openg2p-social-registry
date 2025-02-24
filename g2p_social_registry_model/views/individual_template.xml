@@ -21,11 +21,10 @@
                             id="address"
                             name="address"
                             class="form-control"
-                            t-esc="beneficiary.address"
                             rows="2"
                             cols="10"
                             placeholder="Enter Address"
-                        />
+                        ><t t-esc="beneficiary.address" /></textarea>
                     </div>
                 </div>
 

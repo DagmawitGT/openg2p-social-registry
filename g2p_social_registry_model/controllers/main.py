@@ -69,8 +69,47 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
 
                     data.update(additional_data)
                     beneficiary_obj = request.env["res.partner"].sudo().create(data)
-
                     beneficiary_id = beneficiary_obj.id
+
+                    # Create a group head as member
+                    head_name_parts = head_name.split(" ")
+                    h_given_name = head_name_parts[0]
+                    h_family_name = head_name_parts[-1]
+
+                    if len(head_name_parts) > 2:
+                        h_addl_name = " ".join(head_name_parts[1:-1])
+                    else:
+                        h_addl_name = ""
+
+                    formatted_name = f"{h_family_name} , {h_given_name} {h_addl_name}"
+
+                    head_individual = (
+                        request.env["res.partner"]
+                        .sudo()
+                        .create(
+                            {
+                                "name": formatted_name,
+                                "given_name": h_given_name,
+                                "addl_name": h_addl_name,
+                                "family_name": h_family_name,
+                                "email": kw.get("email"),
+                                "address": kw.get("address"),
+                                "birthdate": kw.get("birthdate"),
+                                "gender": kw.get("gender"),
+                                "is_registrant": True,
+                                "is_group": False,
+                                "user_id": user.id,
+                            }
+                        )
+                    )
+
+                    # Create membership relationship between head and group
+                    group_membership_vals = [
+                        (0, 0, {"individual": head_individual.id, "group": beneficiary_id})
+                    ]
+
+                    # Update the group with this membership
+                    beneficiary_obj.write({"group_membership_ids": group_membership_vals})
 
             beneficiary = request.env["res.partner"].sudo().browse(beneficiary_id)
 

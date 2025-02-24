@@ -7,7 +7,7 @@ class ProcessSocialGroupMixin(models.AbstractModel):
     def _process_group(self, group_info):
         res = super()._process_group(group_info)
         info_dict = group_info.model_dump()
-        
+
         social_fields = [
             "num_preg_lact_women",
             "num_malnourished_children",
@@ -35,5 +35,5 @@ class ProcessSocialGroupMixin(models.AbstractModel):
         for field in social_fields + economic_fields:
             if info_dict.get(field):
                 res[field] = info_dict[field]
-        
+
         return res

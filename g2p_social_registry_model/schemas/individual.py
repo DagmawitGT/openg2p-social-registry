@@ -5,7 +5,8 @@ from odoo.addons.g2p_registry_rest_api.schemas.individual import (
     UpdateIndividualInfoResponse,
 )
 
-class SocialRegistryDemoIndividualInfoResponse(IndividualInfoResponse,extends= IndividualInfoResponse):
+
+class SocialRegistryDemoIndividualInfoResponse(IndividualInfoResponse, extends=IndividualInfoResponse):
     education_level: str | None = None
     employment_status: str | None = None
     marital_status: str | None = None
@@ -13,7 +14,7 @@ class SocialRegistryDemoIndividualInfoResponse(IndividualInfoResponse,extends= I
     income: float | None = None
 
 
-class SocialRegistryDemoIndividualInfoRequest(IndividualInfoRequest,extends = IndividualInfoRequest):
+class SocialRegistryDemoIndividualInfoRequest(IndividualInfoRequest, extends=IndividualInfoRequest):
     education_level: str | None = None
     employment_status: str | None = None
     marital_status: str | None = None
@@ -21,7 +22,9 @@ class SocialRegistryDemoIndividualInfoRequest(IndividualInfoRequest,extends = In
     income: float | None = None
 
 
-class SocialRegistryDemoUpdateIndividualInfoRequest(UpdateIndividualInfoRequest,extends = UpdateIndividualInfoRequest):
+class SocialRegistryDemoUpdateIndividualInfoRequest(
+    UpdateIndividualInfoRequest, extends=UpdateIndividualInfoRequest
+):
     education_level: str | None = None
     employment_status: str | None = None
     marital_status: str | None = None
@@ -29,9 +32,11 @@ class SocialRegistryDemoUpdateIndividualInfoRequest(UpdateIndividualInfoRequest,
     income: float | None = None
 
 
-class SocialRegistryDemoUpdateIndividualInfoResponse(UpdateIndividualInfoResponse, extends = UpdateIndividualInfoResponse):
-   education_level: str | None = None
-   employment_status: str | None = None
-   marital_status: str | None = None
-   occupation: str | None = None
-   income: float | None = None
+class SocialRegistryDemoUpdateIndividualInfoResponse(
+    UpdateIndividualInfoResponse, extends=UpdateIndividualInfoResponse
+):
+    education_level: str | None = None
+    employment_status: str | None = None
+    marital_status: str | None = None
+    occupation: str | None = None
+    income: float | None = None
