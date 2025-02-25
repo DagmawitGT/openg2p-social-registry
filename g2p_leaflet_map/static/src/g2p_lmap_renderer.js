@@ -1,15 +1,15 @@
 /** @odoo-module */
 /* global L */
 
-import {Component, onMounted, onWillStart, useRef} from "@odoo/owl";
-import {loadCSS, loadJS} from "@web/core/assets";
+import { Component, onMounted, onWillStart, useRef } from "@odoo/owl";
+import { loadCSS, loadJS } from "@web/core/assets";
 
 export class G2PLeafletMapRenderer extends Component {
     static template = "g2p_leaflet_map.MapRenderer";
     static props = {
-        polygonCoords: {type: Array, optional: true, default: []},
-        partnerLatitude: {type: Number, optional: true},
-        partnerLongitude: {type: Number, optional: true},
+        polygonCoords: { type: Array, optional: true, default: [] },
+        partnerLatitude: { type: Number, optional: true },
+        partnerLongitude: { type: Number, optional: true },
     };
 
     setup() {
@@ -23,7 +23,7 @@ export class G2PLeafletMapRenderer extends Component {
             try {
                 const response = await fetch("/osm/config/get", {
                     method: "GET",
-                    headers: {"Content-Type": "application/json"},
+                    headers: { "Content-Type": "application/json" },
                 });
 
                 if (response.ok) {
@@ -72,7 +72,7 @@ export class G2PLeafletMapRenderer extends Component {
                 // **Add a Pin at Polygon Center**
                 L.marker(polygonCenter, {
                     icon: L.icon({
-                        iconUrl: "/g2p_leaflet_map/static/lib/leaflet/images/marker-icon.png", 
+                        iconUrl: "/g2p_leaflet_map/static/lib/leaflet/images/marker-icon.png",
                         iconSize: [25, 40],
                         iconAnchor: [12, 40],
                     }),
