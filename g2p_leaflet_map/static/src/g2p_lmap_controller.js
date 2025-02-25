@@ -1,14 +1,13 @@
 /** @odoo-module */
 
-// eslint-disable-next-line
 import {Component} from "@odoo/owl";
+import {G2PLeafletMapRenderer} from "./g2p_lmap_renderer";
 import {Layout} from "@web/search/layout";
-import {LeafletMapRenderer} from "./lmap_renderer";
 import {standardViewProps} from "@web/views/standard_view_props";
 
-export class LeafletMapController extends Component {
-    static template = "leaflet_map.MapView";
-    static components = {LeafletMapRenderer, Layout};
+export class G2PLeafletMapController extends Component {
+    static template = "g2p_leaflet_map.MapView";
+    static components = {G2PLeafletMapRenderer, Layout};
     static props = {
         ...standardViewProps,
     };

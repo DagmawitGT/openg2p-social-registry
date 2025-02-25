@@ -1,4 +1,0 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-
-osm_config_access,access_osm_config_user,model_osm_config,base.group_user,1,1,1,1
-map_view_access,access_map_view_user,model_map_view,base.group_user,1,1,1,1

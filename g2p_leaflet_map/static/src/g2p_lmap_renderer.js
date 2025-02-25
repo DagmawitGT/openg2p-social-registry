@@ -1,11 +1,11 @@
-/* eslint-disable  */
 /** @odoo-module */
+/* global L */
 
-import {Component, onWillStart, useRef, onMounted} from "@odoo/owl";
-import {loadJS, loadCSS} from "@web/core/assets";
+import {Component, onMounted, onWillStart, useRef} from "@odoo/owl";
+import {loadCSS, loadJS} from "@web/core/assets";
 
-export class LeafletMapRenderer extends Component {
-    static template = "leaflet_map.MapRenderer";
+export class G2PLeafletMapRenderer extends Component {
+    static template = "g2p_leaflet_map.MapRenderer";
     static props = {
         polygonCoords: {type: Array, optional: true, default: []},
         partnerLatitude: {type: Number, optional: true},
@@ -33,8 +33,8 @@ export class LeafletMapRenderer extends Component {
                     console.warn("Failed to fetch tile server URL, using default.");
                 }
 
-                await loadCSS("/leaflet_map/static/lib/leaflet/leaflet.css");
-                await loadJS("/leaflet_map/static/lib/leaflet/leaflet.js");
+                await loadCSS("/g2p_leaflet_map/static/lib/leaflet/leaflet.css");
+                await loadJS("/g2p_leaflet_map/static/lib/leaflet/leaflet.js");
             } catch (error) {
                 console.error("Error loading OSM config:", error);
             }
@@ -48,8 +48,8 @@ export class LeafletMapRenderer extends Component {
                 return;
             }
 
-            let mapCenter = [9.145, 40.489]; // Default center
-            let zoomLevel = 12;
+            let mapCenter = [9.145, 40.489];
+            const zoomLevel = 12;
 
             if (this.props.partnerLatitude !== null && this.props.partnerLongitude !== null) {
                 mapCenter = [this.props.partnerLatitude, this.props.partnerLongitude];
@@ -61,16 +61,13 @@ export class LeafletMapRenderer extends Component {
                 maxZoom: 19,
                 attribution: "&copy; OpenStreetMap contributors",
             }).addTo(this.map);
-
-            // ✅ Add Polygon and Automatically Adjust Zoom
             if (this.props.polygonCoords?.length) {
                 const polygon = L.polygon(this.props.polygonCoords).addTo(this.map);
-                this.map.fitBounds(polygon.getBounds()); // Auto zoom to fit polygon
+                this.map.fitBounds(polygon.getBounds());
             } else {
                 console.warn("No polygon coordinates received.");
             }
 
-            // ✅ Add Marker for Partner Location
             if (this.props.partnerLatitude !== null && this.props.partnerLongitude !== null) {
                 L.marker([this.props.partnerLatitude, this.props.partnerLongitude])
                     .addTo(this.map)
