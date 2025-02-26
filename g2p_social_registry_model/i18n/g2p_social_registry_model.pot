@@ -246,6 +246,11 @@ msgid "No. of member with Disability"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model:ir.model,name:g2p_social_registry_model.model_odk_import
+msgid "ODK Import"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__caste_ethnic_group__other
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__type_of_land_owned__other
 msgid "Other"
