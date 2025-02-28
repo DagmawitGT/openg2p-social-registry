@@ -48,31 +48,54 @@ export class G2PLeafletMapRenderer extends Component {
                 return;
             }
 
-            let mapCenter = [9.145, 40.489];
+            const mapCenter = [9.145, 40.489];
             const zoomLevel = 12;
-
-            if (this.props.partnerLatitude !== null && this.props.partnerLongitude !== null) {
-                mapCenter = [this.props.partnerLatitude, this.props.partnerLongitude];
-            }
-
             this.map = L.map(this.root.el).setView(mapCenter, zoomLevel);
 
             L.tileLayer(this.config.tile_server_url, {
                 maxZoom: 19,
                 attribution: "&copy; OpenStreetMap contributors",
             }).addTo(this.map);
+
+            const bounds = L.latLngBounds([]);
+            let polygon = null;
+            let polygonCenter = null;
+
+            // **Add Polygon**
             if (this.props.polygonCoords?.length) {
-                const polygon = L.polygon(this.props.polygonCoords).addTo(this.map);
-                this.map.fitBounds(polygon.getBounds());
+                polygon = L.polygon(this.props.polygonCoords).addTo(this.map);
+                bounds.extend(polygon.getBounds());
+
+                // **Calculate Polygon Center**
+                polygonCenter = polygon.getBounds().getCenter();
+
+                // **Add a Pin at Polygon Center**
+                L.marker(polygonCenter, {
+                    icon: L.icon({
+                        iconUrl: "/g2p_leaflet_map/static/lib/leaflet/images/marker-icon.png",
+                        iconSize: [25, 40],
+                        iconAnchor: [12, 40],
+                    }),
+                })
+                    .addTo(this.map)
+                    .bindPopup("Land Shape");
             } else {
                 console.warn("No polygon coordinates received.");
             }
 
+            // **Add Partner Location Marker**
             if (this.props.partnerLatitude !== null && this.props.partnerLongitude !== null) {
-                L.marker([this.props.partnerLatitude, this.props.partnerLongitude])
-                    .addTo(this.map)
-                    .bindPopup("Data Collection Point")
-                    .openPopup();
+                const partnerLocation = [this.props.partnerLatitude, this.props.partnerLongitude];
+                L.marker(partnerLocation).addTo(this.map).bindPopup("Data Collection Point").openPopup();
+
+                bounds.extend(partnerLocation);
+            }
+
+            // **Fit Map to Show Everything**
+            if (bounds.isValid()) {
+                this.map.fitBounds(bounds.pad(0.2));
+            } else {
+                this.map.setView(mapCenter, zoomLevel);
             }
         });
     }
