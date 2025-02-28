@@ -10,3 +10,7 @@ access_reg_rel_group_base_val,g2p_reg_rel_group_base_val_access,g2p_registry_bas
 g2p_phone_number_val,Phone Number val Access,g2p_registry_base.model_g2p_phone_number,g2p_draft_publish.group_int_validator,1,1,1,1
 
 access_reject_wizard,group_reject_wizard_all,model_reject_wizard,g2p_draft_publish.group_int_validator,1,1,1,1
+access_ir_ui_view_user,access_ir_ui_view_user,base.model_ir_ui_view,group_int_validator,1,0,0,0
+access_mail_activity_user,access_mail_activity_user,mail.model_mail_activity,group_int_validator,1,1,1,1
+access_mail_message_user,access_mail_message_user,mail.model_mail_message,group_int_validator,1,1,1,1
+access_g2p_memebership_kind_user,access_g2p_memnership_kind,g2p_registry_membership.model_g2p_group_membership_kind,group_int_validator,1,1,1,1
