@@ -49,11 +49,6 @@ msgid "Admin"
 msgstr ""
 
 #. module: g2p_draft_publish
-#: model:res.groups,name:g2p_draft_publish.group_int_approver
-msgid "Approver"
-msgstr ""
-
-#. module: g2p_draft_publish
 #: model:ir.model.fields,field_description:g2p_draft_publish.field_draft_record__message_attachment_count
 msgid "Attachment Count"
 msgstr ""
@@ -88,6 +83,7 @@ msgstr ""
 
 #. module: g2p_draft_publish
 #: model_terms:ir.ui.view,arch_db:g2p_draft_publish.g2p_validation_form_view
+#: model_terms:ir.ui.view,arch_db:g2p_draft_publish.g2p_validation_form_view_only
 msgid "Discard"
 msgstr ""
 
@@ -104,19 +100,24 @@ msgid "Draft"
 msgstr ""
 
 #. module: g2p_draft_publish
-#: model_terms:ir.ui.view,arch_db:g2p_draft_publish.view_draft_imported_record_form
-msgid "Draft Imported Farmer Record"
+#: model:res.groups,name:g2p_draft_publish.group_int_approver
+msgid "Draft Approver"
 msgstr ""
 
 #. module: g2p_draft_publish
-#: model:ir.model,name:g2p_draft_publish.model_draft_record
-msgid "Draft Imported Records"
+#: model_terms:ir.ui.view,arch_db:g2p_draft_publish.view_draft_imported_record_form
+msgid "Draft Imported Farmer Record"
 msgstr ""
 
 #. module: g2p_draft_publish
 #: model:ir.module.category,name:g2p_draft_publish.integration_module
 #: model:ir.ui.menu,name:g2p_draft_publish.draft_publish_main_menu
 msgid "Draft Publish"
+msgstr ""
+
+#. module: g2p_draft_publish
+#: model:ir.model,name:g2p_draft_publish.model_draft_record
+msgid "Draft Records"
 msgstr ""
 
 #. module: g2p_draft_publish
@@ -266,7 +267,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/g2p_draft_publish/models/draft_records.py:0
 #, python-format
-msgid "No partner data available to edit."
+msgid "No partner data available."
 msgstr ""
 
 #. module: g2p_draft_publish
@@ -318,6 +319,13 @@ msgstr ""
 #. module: g2p_draft_publish
 #: model:ir.model.fields,field_description:g2p_draft_publish.field_reject_wizard__rejection_reason
 msgid "Reason for Rejection"
+msgstr ""
+
+#. module: g2p_draft_publish
+#. odoo-python
+#: code:addons/g2p_draft_publish/models/draft_records.py:0
+#, python-format
+msgid "Record Published"
 msgstr ""
 
 #. module: g2p_draft_publish
@@ -417,6 +425,11 @@ msgstr ""
 #. module: g2p_draft_publish
 #: model:ir.module.category,description:g2p_draft_publish.integration_module
 msgid "User access level for  Draft Publish module"
+msgstr ""
+
+#. module: g2p_draft_publish
+#: model_terms:ir.ui.view,arch_db:g2p_draft_publish.view_draft_imported_record_tree
+msgid "View"
 msgstr ""
 
 #. module: g2p_draft_publish
