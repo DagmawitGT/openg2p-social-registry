@@ -7,7 +7,13 @@
     "author": "OpenG2P",
     "website": "https://openg2p.org",
     "license": "LGPL-3",
-    "depends": ["g2p_social_registry", "g2p_odk_importer", "g2p_registry_rest_api"],
+    "depends": [
+        "g2p_social_registry",
+        "g2p_odk_importer",
+        "g2p_registry_rest_api",
+        "g2p_registry_g2p_connect_rest_api",
+        "g2p_registration_portal_base",
+    ],
     "data": [
         "views/group_view.xml",
         "views/individual_view.xml",
